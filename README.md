@@ -9,6 +9,9 @@ Static landing page cho dự án **Xe Ghép Việt**, deploy bằng GitHub Pages
 .
 ├── CNAME
 ├── index.html
+├── en.html
+├── privacy.html
+├── privacy-en.html
 ├── styles.css
 ├── script.js
 └── README.md
@@ -55,6 +58,28 @@ git push origin master
 ```
 
 Sau khi push, GitHub Pages sẽ tự publish site từ file `index.html`.
+
+## Đa ngôn ngữ và SEO
+
+Site dùng tiếng Việt làm mặc định:
+
+```text
+https://xeghepviet.com/
+```
+
+Bản tiếng Anh dùng URL riêng:
+
+```text
+https://xeghepviet.com/en.html
+```
+
+Các trang chính có `canonical`, `hreflang`, Open Graph và Twitter Card để phục
+vụ SEO, chia sẻ link và index đa ngôn ngữ rõ ràng. Khi thêm trang mới, cần thêm:
+
+- `link rel="canonical"` trỏ về URL chính thức của trang.
+- `link rel="alternate" hreflang="vi"` và `hreflang="en"` cho cặp ngôn ngữ.
+- `hreflang="x-default"` trỏ về bản tiếng Việt mặc định.
+- Open Graph gồm `og:title`, `og:description`, `og:url`, `og:image`, `og:locale`.
 
 ## Cấu hình domain `xeghepviet.com`
 
@@ -128,6 +153,12 @@ Privacy policy public URL:
 
 ```text
 https://xeghepviet.com/privacy.html
+```
+
+English privacy policy URL:
+
+```text
+https://xeghepviet.com/privacy-en.html
 ```
 
 URL này dùng cho App Store Connect ở mục:

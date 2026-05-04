@@ -1,1 +1,129 @@
-Xe ghep viet
+# Xe Ghép Việt Landing Page
+
+Static landing page cho dự án **Xe Ghép Việt**, deploy bằng GitHub Pages từ branch
+`master`, folder `/(root)`.
+
+## Cấu trúc
+
+```text
+.
+├── CNAME
+├── index.html
+├── styles.css
+├── script.js
+└── README.md
+```
+
+Không cần build tool. Site dùng HTML/CSS/JS thuần nên GitHub Pages có thể phục vụ
+trực tiếp từ root repository.
+
+## Chạy local
+
+Cách nhanh nhất:
+
+```bash
+open index.html
+```
+
+Hoặc chạy local server để test giống static hosting:
+
+```bash
+python3 -m http.server 8080
+```
+
+Sau đó mở:
+
+```text
+http://localhost:8080
+```
+
+## Deploy GitHub Pages
+
+Repository GitHub Pages đang cấu hình:
+
+- Source: `Deploy from a branch`
+- Branch: `master`
+- Folder: `/(root)`
+- HTTPS: enabled
+
+Quy trình deploy:
+
+```bash
+git add index.html styles.css script.js CNAME README.md
+git commit -m "Build landing page"
+git push origin master
+```
+
+Sau khi push, GitHub Pages sẽ tự publish site từ file `index.html`.
+
+## Cấu hình domain `xeghepviet.com`
+
+File `CNAME` ở root đã cấu hình:
+
+```text
+xeghepviet.com
+```
+
+Trong phần quản lý DNS của nhà cung cấp tên miền, cấu hình như sau.
+
+### Apex domain
+
+Với domain gốc `xeghepviet.com`, thêm 4 bản ghi `A` trỏ về GitHub Pages:
+
+```text
+Type: A
+Name/Host: @
+Value: 185.199.108.153
+
+Type: A
+Name/Host: @
+Value: 185.199.109.153
+
+Type: A
+Name/Host: @
+Value: 185.199.110.153
+
+Type: A
+Name/Host: @
+Value: 185.199.111.153
+```
+
+Nếu DNS provider hỗ trợ IPv6, có thể thêm `AAAA`:
+
+```text
+2606:50c0:8000::153
+2606:50c0:8001::153
+2606:50c0:8002::153
+2606:50c0:8003::153
+```
+
+### Subdomain www
+
+Nếu muốn dùng `www.xeghepviet.com`, thêm:
+
+```text
+Type: CNAME
+Name/Host: www
+Value: hiepnq2007.github.io
+```
+
+Sau khi DNS cập nhật, vào GitHub repository:
+
+```text
+Settings -> Pages -> Custom domain
+```
+
+Nhập:
+
+```text
+xeghepviet.com
+```
+
+Bật `Enforce HTTPS` khi GitHub xác thực domain xong. DNS có thể mất vài phút đến
+vài giờ để propagate.
+
+## Nguồn ảnh
+
+Landing page dùng ảnh remote từ Unsplash/Pexels với license miễn phí. Khi cần
+ổn định tuyệt đối cho production, nên tải ảnh tối ưu về repo/CDN riêng và cập
+nhật đường dẫn trong `index.html`.

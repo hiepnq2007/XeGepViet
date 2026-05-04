@@ -470,6 +470,81 @@ img {
   font-weight: 900;
 }
 
+.site-footer a {
+  color: rgba(255, 255, 255, 0.78);
+  font-weight: 700;
+}
+
+.legal-header {
+  position: sticky;
+}
+
+.legal-page {
+  padding-top: 28px;
+}
+
+.legal-hero {
+  padding: 72px clamp(18px, 5vw, 72px) 36px;
+  background: #eef4ef;
+}
+
+.legal-hero h1 {
+  max-width: 920px;
+  margin: 0;
+  font-size: clamp(40px, 7vw, 74px);
+  line-height: 0.98;
+  letter-spacing: 0;
+}
+
+.legal-hero p {
+  max-width: 860px;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.effective-date {
+  margin-top: 18px;
+  font-weight: 800;
+}
+
+.legal-content {
+  display: grid;
+  gap: 14px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 36px clamp(18px, 5vw, 72px) 82px;
+}
+
+.legal-content article {
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.legal-content h2 {
+  margin: 0 0 12px;
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.legal-content p,
+.legal-content li {
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.legal-content ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.legal-content a {
+  color: var(--green);
+  font-weight: 800;
+}
+
 @media (max-width: 860px) {
   .site-header {
     align-items: flex-start;

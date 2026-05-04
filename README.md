@@ -122,6 +122,24 @@ xeghepviet.com
 Bật `Enforce HTTPS` khi GitHub xác thực domain xong. DNS có thể mất vài phút đến
 vài giờ để propagate.
 
+## Privacy Policy cho App Store
+
+Privacy policy public URL:
+
+```text
+https://xeghepviet.com/privacy.html
+```
+
+URL này dùng cho App Store Connect ở mục:
+
+```text
+App Information -> App Privacy -> Privacy Policy URL
+```
+
+Chính sách hiện mô tả dữ liệu tài khoản, số điện thoại, hồ sơ tài xế, ảnh giấy
+tờ, vị trí foreground/background, thông báo, booking/chuyến đi, lịch sử thu nhập
+và quyền yêu cầu xoá dữ liệu.
+
 ## Nguồn ảnh
 
 Landing page dùng ảnh remote từ Unsplash/Pexels với license miễn phí. Khi cần

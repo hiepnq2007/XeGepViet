@@ -26,5 +26,5 @@ if (slides.length > 1) {
 form?.addEventListener("submit", (event) => {
   event.preventDefault();
   form.reset();
-  window.alert("Cảm ơn bạn. Form demo đã nhận thông tin trên trình duyệt.");
+  window.alert("Cảm ơn bạn. Chúng tôi đã ghi nhận thông tin.");
 });

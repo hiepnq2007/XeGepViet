@@ -89,35 +89,43 @@ img {
 .header-actions {
   display: inline-flex;
   align-items: center;
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
   gap: 12px;
 }
 
 .language-switch {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
-  min-height: 36px;
-  padding: 3px;
-  border: 1px solid rgba(255, 255, 255, 0.36);
+  flex: 0 0 auto;
+  gap: 4px;
+  min-height: 42px;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.48);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+  background: rgba(8, 24, 19, 0.52);
+  box-shadow: 0 10px 26px rgba(5, 20, 16, 0.18);
+  backdrop-filter: blur(14px);
 }
 
 .site-header.scrolled .language-switch {
   border-color: var(--line);
-  background: rgba(255, 255, 255, 0.74);
+  background: rgba(255, 255, 255, 0.88);
 }
 
 .language-switch a {
-  display: inline-grid;
-  min-width: 34px;
-  min-height: 28px;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 58px;
+  min-height: 32px;
+  padding: 0 9px;
   border-radius: 6px;
   font-size: 12px;
   font-weight: 900;
   letter-spacing: 0;
+  white-space: nowrap;
 }
 
 .language-switch a.active {
@@ -128,6 +136,39 @@ img {
 .site-header.scrolled .language-switch a.active {
   color: #fff;
   background: var(--green);
+}
+
+.flag {
+  position: relative;
+  display: inline-block;
+  width: 18px;
+  height: 12px;
+  overflow: hidden;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px rgba(21, 33, 28, 0.16);
+}
+
+.flag-vi {
+  background: #d71920;
+}
+
+.flag-vi::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #ffd34d;
+  transform: translate(-50%, -50%);
+}
+
+.flag-en {
+  background:
+    linear-gradient(90deg, transparent 42%, #c8202f 43%, #c8202f 57%, transparent 58%),
+    linear-gradient(0deg, transparent 35%, #c8202f 36%, #c8202f 64%, transparent 65%),
+    linear-gradient(90deg, #224a8d 0 50%, #f7f7f7 50% 100%);
 }
 
 .header-cta,
@@ -598,7 +639,8 @@ img {
 
 @media (max-width: 860px) {
   .site-header {
-    align-items: flex-start;
+    align-items: center;
+    gap: 12px;
   }
 
   .nav-links,
@@ -608,6 +650,11 @@ img {
 
   .header-actions {
     margin-left: auto;
+  }
+
+  .language-switch a {
+    min-width: 50px;
+    padding: 0 7px;
   }
 
   .hero {

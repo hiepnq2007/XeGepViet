@@ -176,3 +176,5 @@ và quyền yêu cầu xoá dữ liệu.
 Landing page dùng ảnh remote từ Unsplash/Pexels với license miễn phí. Khi cần
 ổn định tuyệt đối cho production, nên tải ảnh tối ưu về repo/CDN riêng và cập
 nhật đường dẫn trong `index.html`.
+
+

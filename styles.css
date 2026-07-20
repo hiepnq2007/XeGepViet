@@ -526,7 +526,7 @@ img {
 
 .site-footer {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 18px;
   padding: 26px clamp(18px, 5vw, 72px);
@@ -534,9 +534,20 @@ img {
   background: #0d1713;
 }
 
-.site-footer span:first-child {
+.footer-brand {
+  display: grid;
+  gap: 6px;
+  max-width: 760px;
+}
+
+.footer-brand span {
   color: #fff;
   font-weight: 900;
+}
+
+.footer-brand p {
+  margin: 0;
+  line-height: 1.55;
 }
 
 .site-footer a {

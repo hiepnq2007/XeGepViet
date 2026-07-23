@@ -200,8 +200,8 @@
         <p class="eyebrow">Available now</p>
         <h2>Mobile app for passengers</h2>
         <p>
-          The experience is built for daily workflows: create bookings, accept
-          passengers, view trip history, and track driver income.
+          The experience is built for daily workflows: create bookings, track
+          trips, and review ride history.
         </p>
         <div class="store-buttons">
           <span>iOS</span>
@@ -222,21 +222,21 @@
       <form class="lead-form">
         <label>
           Full name
-          <input type="text" name="name" placeholder="Nguyen Van A" />
+          <input type="text" name="name" placeholder="Nguyen Van A" required />
         </label>
         <label>
           Phone number
-          <input type="tel" name="phone" placeholder="09xx xxx xxx" />
+          <input type="tel" name="phone" placeholder="09xx xxx xxx" required />
         </label>
         <label>
           I am a
           <select name="role">
-            <option>Passenger</option>
-            <option>Driver</option>
-            <option>Route partner</option>
+            <option value="customer">Passenger</option>
+            <option value="driver">Driver</option>
           </select>
         </label>
         <button type="submit">Submit</button>
+        <p class="form-note" data-form-note aria-live="polite"></p>
       </form>
     </section>
   </main>

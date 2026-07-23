@@ -200,7 +200,7 @@
         <h2>Ứng dụng mobile cho hành khách</h2>
         <p>
           Trải nghiệm được thiết kế cho các thao tác thường ngày: tạo booking,
-          nhận khách, xem lịch sử chuyến đi và thống kê thu nhập.
+          theo dõi chuyến đi và xem lịch sử hành trình.
         </p>
         <div class="store-downloads">
           <div class="store-download-item">
@@ -251,21 +251,21 @@
       <form class="lead-form">
         <label>
           Họ tên
-          <input type="text" name="name" placeholder="Nguyễn Văn A" />
+          <input type="text" name="name" placeholder="Nguyễn Văn A" required />
         </label>
         <label>
           Số điện thoại
-          <input type="tel" name="phone" placeholder="09xx xxx xxx" />
+          <input type="tel" name="phone" placeholder="09xx xxx xxx" required />
         </label>
         <label>
           Bạn là
           <select name="role">
-            <option>Khách hàng</option>
-            <option>Tài xế</option>
-            <option>Đối tác tuyến</option>
+            <option value="customer">Khách hàng</option>
+            <option value="driver">Tài xế</option>
           </select>
         </label>
         <button type="submit">Gửi thông tin</button>
+        <p class="form-note" data-form-note aria-live="polite"></p>
       </form>
     </section>
   </main>

@@ -496,8 +496,8 @@ img {
 }
 
 .store-qr {
-  width: 120px;
-  height: 120px;
+  width: 168px;
+  height: 168px;
   padding: 8px;
   border-radius: 10px;
   background: #fff;
@@ -787,6 +787,11 @@ img {
 
   .store-button {
     width: 100%;
+  }
+
+  .store-qr {
+    width: 144px;
+    height: 144px;
   }
 
   .qr-grid {

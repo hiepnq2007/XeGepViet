@@ -47,10 +47,11 @@ form?.addEventListener("submit", async (event) => {
   const formData = new FormData(form);
   const fullName = String(formData.get("name") || "").trim();
   const phoneNumber = String(formData.get("phone") || "").trim();
+  const hometown = String(formData.get("hometown") || "").trim();
   const role = String(formData.get("role") || "customer").trim() || "customer";
 
-  if (!fullName || !phoneNumber) {
-    setFormNote("Vui lòng nhập họ tên và số điện thoại.", "error");
+  if (!fullName || !phoneNumber || !hometown) {
+    setFormNote("Vui lòng nhập họ tên, số điện thoại và quê quán.", "error");
     return;
   }
 
@@ -73,6 +74,7 @@ form?.addEventListener("submit", async (event) => {
       body: JSON.stringify({
         fullName,
         phoneNumber,
+        hometown,
         role,
         source: "landing-page",
       }),

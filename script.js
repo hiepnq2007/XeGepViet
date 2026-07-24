@@ -5,13 +5,14 @@ const formNote = document.querySelector("[data-form-note]");
 let currentSlide = 0;
 
 const LOCAL_FORUM_API = "http://127.0.0.1:3020/api/forum";
+const PUBLIC_FORUM_API = "https://api.xeghepviet.com/community/forum/api/forum";
 
 function resolveForumApiBase() {
   if (window.location.protocol === "file:" || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
     return LOCAL_FORUM_API;
   }
 
-  return `${window.location.origin.replace(/\/$/, "")}/community/forum/api/forum`;
+  return PUBLIC_FORUM_API;
 }
 
 function setFormNote(message, tone = "neutral") {

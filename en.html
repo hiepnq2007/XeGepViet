@@ -234,9 +234,20 @@
         </label>
         <label>
           I am a
-          <select name="role">
+          <select name="role" data-role-select>
             <option value="customer">Passenger</option>
             <option value="driver">Driver</option>
+          </select>
+        </label>
+        <label data-driver-field hidden>
+          Cooperative
+          <input type="text" name="cooperative" placeholder="Cooperative name" disabled />
+        </label>
+        <label data-driver-field hidden>
+          License plate color
+          <select name="licensePlateColor" disabled>
+            <option value="white">White</option>
+            <option value="yellow">Yellow</option>
           </select>
         </label>
         <button type="submit">Submit</button>

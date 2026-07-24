@@ -522,6 +522,10 @@ img {
   font-weight: 800;
 }
 
+.lead-form [hidden] {
+  display: none;
+}
+
 .lead-form input,
 .lead-form select {
   width: 100%;

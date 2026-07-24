@@ -263,9 +263,20 @@
         </label>
         <label>
           Bạn là
-          <select name="role">
+          <select name="role" data-role-select>
             <option value="customer">Khách hàng</option>
             <option value="driver">Tài xế</option>
+          </select>
+        </label>
+        <label data-driver-field hidden>
+          Hợp tác xã
+          <input type="text" name="cooperative" placeholder="Tên hợp tác xã" disabled />
+        </label>
+        <label data-driver-field hidden>
+          Màu biển số xe
+          <select name="licensePlateColor" disabled>
+            <option value="white">Trắng</option>
+            <option value="yellow">Vàng</option>
           </select>
         </label>
         <button type="submit">Gửi thông tin</button>

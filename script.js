@@ -2,6 +2,8 @@ const header = document.querySelector("[data-header]");
 const slides = Array.from(document.querySelectorAll(".hero-slide"));
 const form = document.querySelector(".lead-form");
 const formNote = document.querySelector("[data-form-note]");
+const roleSelect = form?.querySelector("[data-role-select]");
+const driverFields = Array.from(form?.querySelectorAll("[data-driver-field]") || []);
 let currentSlide = 0;
 
 const LOCAL_FORUM_API = "http://127.0.0.1:3020/api/forum";
@@ -21,6 +23,18 @@ function setFormNote(message, tone = "neutral") {
   formNote.dataset.tone = tone;
 }
 
+function updateDriverFields() {
+  const isDriver = roleSelect?.value === "driver";
+  driverFields.forEach((field) => {
+    field.hidden = !isDriver;
+    const control = field.querySelector("input, select");
+    if (control) {
+      control.disabled = !isDriver;
+      control.required = isDriver;
+    }
+  });
+}
+
 function updateHeader() {
   header?.classList.toggle("scrolled", window.scrollY > 24);
 }
@@ -33,6 +47,8 @@ function showSlide(index) {
 
 window.addEventListener("scroll", updateHeader, { passive: true });
 updateHeader();
+roleSelect?.addEventListener("change", updateDriverFields);
+updateDriverFields();
 
 if (slides.length > 1) {
   window.setInterval(() => {
@@ -49,9 +65,16 @@ form?.addEventListener("submit", async (event) => {
   const phoneNumber = String(formData.get("phone") || "").trim();
   const hometown = String(formData.get("hometown") || "").trim();
   const role = String(formData.get("role") || "customer").trim() || "customer";
+  const cooperative = String(formData.get("cooperative") || "").trim();
+  const licensePlateColor = String(formData.get("licensePlateColor") || "").trim();
 
   if (!fullName || !phoneNumber || !hometown) {
     setFormNote("Vui lòng nhập họ tên, số điện thoại và quê quán.", "error");
+    return;
+  }
+
+  if (role === "driver" && (!cooperative || !licensePlateColor)) {
+    setFormNote("Vui lòng nhập hợp tác xã và chọn màu biển số xe.", "error");
     return;
   }
 
@@ -76,6 +99,8 @@ form?.addEventListener("submit", async (event) => {
         phoneNumber,
         hometown,
         role,
+        cooperative: role === "driver" ? cooperative : undefined,
+        licensePlateColor: role === "driver" ? licensePlateColor : undefined,
         source: "landing-page",
       }),
     });
@@ -86,6 +111,7 @@ form?.addEventListener("submit", async (event) => {
     }
 
     form.reset();
+    updateDriverFields();
     setFormNote("Đã ghi nhận thông tin. Chúng tôi sẽ liên hệ sớm.", "success");
   } catch (error) {
     console.error("[LandingLead] submit.error", error);

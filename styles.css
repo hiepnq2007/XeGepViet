@@ -504,6 +504,122 @@ img {
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.16);
 }
 
+.news-section {
+  background: #f7fbf8;
+}
+
+.news-section .section-heading p:not(.eyebrow) {
+  max-width: 760px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.news-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: -10px 0 22px;
+}
+
+.news-filter-button {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  background: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.news-filter-button.active {
+  color: #fff;
+  border-color: var(--tag-color, var(--green));
+  background: var(--tag-color, var(--green));
+}
+
+.news-card {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 12px 34px rgba(21, 33, 28, 0.07);
+}
+
+.news-image,
+.news-image-placeholder {
+  width: 100%;
+  aspect-ratio: 1.42;
+  object-fit: cover;
+  background:
+    linear-gradient(135deg, rgba(15, 124, 85, 0.16), rgba(40, 83, 107, 0.16)),
+    #eef4ef;
+}
+
+.news-card-body {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+}
+
+.news-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.news-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 8px;
+  color: #fff;
+  background: var(--tag-color, var(--green));
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.news-meta time,
+.news-language-note {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.news-card h3 {
+  margin: 0;
+  font-size: 21px;
+  line-height: 1.24;
+}
+
+.news-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.news-empty {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  background: var(--surface);
+}
+
 .cta-section {
   padding: 86px clamp(18px, 5vw, 72px);
 }
@@ -733,6 +849,7 @@ img {
 
   .hero-stats,
   .feature-grid,
+  .news-grid,
   .process-grid,
   .split-section,
   .app-section,

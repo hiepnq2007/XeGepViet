@@ -6,6 +6,8 @@ const roleSelect = form?.querySelector("[data-role-select]");
 const driverFields = Array.from(form?.querySelectorAll("[data-driver-field]") || []);
 const newsList = document.querySelector("[data-news-list]");
 const newsFilter = document.querySelector("[data-news-filter]");
+const newsCount = document.querySelector("[data-news-count]");
+const newsDetail = document.querySelector("[data-news-detail]");
 let selectedNewsTypeID = "";
 let currentSlide = 0;
 
@@ -50,13 +52,54 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+function getNewsDetailPage() {
+  return getPageLanguage() === "en" ? "news-detail-en.html" : "news-detail.html";
+}
+
+function getNewsListPage() {
+  return getPageLanguage() === "en" ? "news-en.html" : "news.html";
+}
+
+function getNewsIDFromSearch() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("id") || "";
+}
+
 function renderNewsItems(news) {
   if (!newsList) return;
   const lang = getPageLanguage();
   const emptyMessage = newsList.dataset.emptyMessage || (lang === "en" ? "No news is available yet." : "Chưa có tin tức.");
+  const mode = newsList.dataset.newsMode || "cards";
 
   if (!Array.isArray(news) || news.length === 0) {
     newsList.innerHTML = `<p class="news-empty">${escapeHtml(emptyMessage)}</p>`;
+    return;
+  }
+
+  if (mode === "list") {
+    newsList.innerHTML = news.map((item) => {
+      const title = escapeHtml(item.title);
+      const summary = escapeHtml(item.shortParagraph || item.fullParagraph || "");
+      const typeName = escapeHtml(item.typeName || "Xe Ghép Việt");
+      const dateLabel = escapeHtml(formatNewsDate(item.dateTime));
+      const image = item.imageLink ? escapeHtml(item.imageLink) : "";
+      const detailHref = `${getNewsDetailPage()}?id=${encodeURIComponent(item.slug || item.newsID)}`;
+      return `
+        <a class="news-list-item" href="${detailHref}" itemscope itemtype="https://schema.org/NewsArticle">
+          ${image
+            ? `<img class="news-list-thumb" src="${image}" alt="${title}" loading="lazy" itemprop="image" />`
+            : '<div class="news-list-thumb news-image-placeholder" aria-hidden="true"></div>'}
+          <span class="news-tag" style="--tag-color: ${escapeHtml(item.typeColor || "#0f7c55")}">${typeName}</span>
+          <h2 itemprop="headline">${title}</h2>
+          <p itemprop="description">${summary}</p>
+          <span class="news-list-meta">
+            ${dateLabel ? `<time datetime="${escapeHtml(item.dateTime)}" itemprop="datePublished">${dateLabel}</time>` : ""}
+            <span>·</span>
+            <span>${Number(item.views || 0).toLocaleString(lang === "en" ? "en-US" : "vi-VN")} ${lang === "en" ? "views" : "lượt xem"}</span>
+          </span>
+        </a>
+      `;
+    }).join("");
     return;
   }
 
@@ -119,7 +162,7 @@ function renderNewsItems(news) {
 async function loadCommunityNews() {
   if (!newsList) return;
   const lang = getPageLanguage();
-  const params = new URLSearchParams({ limit: "3", lang });
+  const params = new URLSearchParams({ limit: newsList.dataset.newsLimit || "3", lang });
   if (selectedNewsTypeID) params.set("typeID", selectedNewsTypeID);
 
   try {
@@ -131,9 +174,16 @@ async function loadCommunityNews() {
       throw new Error(payload?.message || "Unable to load news");
     }
     renderNewsItems(payload?.data?.news || []);
+    if (newsCount) {
+      const total = Number(payload?.meta?.total || 0);
+      newsCount.textContent = lang === "en" ? `${total} news` : `${total} tin`;
+    }
   } catch (error) {
     console.error("[CommunityNews] load.error", error);
     renderNewsItems([]);
+    if (newsCount) {
+      newsCount.textContent = lang === "en" ? "0 news" : "0 tin";
+    }
   }
 }
 
@@ -177,6 +227,107 @@ async function loadCommunityNewsTypes() {
   }
 }
 
+function renderArticleJsonLd(news) {
+  const existingJsonLd = document.querySelector("[data-news-jsonld]");
+  existingJsonLd?.remove();
+  const jsonLd = document.createElement("script");
+  jsonLd.type = "application/ld+json";
+  jsonLd.dataset.newsJsonld = "true";
+  jsonLd.textContent = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: news.title,
+    description: news.shortParagraph || news.fullParagraph || "",
+    image: news.imageLink || undefined,
+    datePublished: news.dateTime || undefined,
+    dateModified: news.updatedAt || news.dateTime || undefined,
+    publisher: {
+      "@type": "Organization",
+      name: getPageLanguage() === "en" ? "Xe Ghep Viet" : "Xe Ghép Việt",
+    },
+  });
+  document.head.appendChild(jsonLd);
+}
+
+function renderNewsDetail(news) {
+  if (!newsDetail) return;
+  if (!news) {
+    newsDetail.innerHTML = `<p class="news-empty">${escapeHtml(newsDetail.dataset.emptyMessage || "News article was not found.")}</p>`;
+    return;
+  }
+  const lang = getPageLanguage();
+  const title = escapeHtml(news.title);
+  const image = news.imageLink ? escapeHtml(news.imageLink) : "";
+  const dateLabel = escapeHtml(formatNewsDate(news.dateTime));
+  const typeName = escapeHtml(news.typeName || "Xe Ghép Việt");
+  const paragraphs = String(news.fullParagraph || news.shortParagraph || "")
+    .split(/\n{2,}|\r?\n/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  document.title = `${news.title} - ${lang === "en" ? "Xe Ghep Viet" : "Xe Ghép Việt"}`;
+  const description = news.shortParagraph || paragraphs[0] || "";
+  document.querySelector('meta[name="description"]')?.setAttribute("content", description);
+  document.querySelector('meta[property="og:title"]')?.setAttribute("content", news.title);
+  document.querySelector('meta[property="og:description"]')?.setAttribute("content", description);
+  if (news.imageLink) {
+    const ogImage = document.querySelector('meta[property="og:image"]') || document.createElement("meta");
+    ogImage.setAttribute("property", "og:image");
+    ogImage.setAttribute("content", news.imageLink);
+    if (!ogImage.parentElement) document.head.appendChild(ogImage);
+  }
+  renderArticleJsonLd(news);
+  document.querySelectorAll(".language-switch a").forEach((link) => {
+    const href = link.getAttribute("href") || "";
+    if (href.includes("news-detail")) {
+      link.setAttribute("href", `${href.split("?")[0]}?id=${encodeURIComponent(news.slug || news.newsID)}`);
+    }
+  });
+
+  newsDetail.innerHTML = `
+    <a class="back-link" href="${getNewsListPage()}">${escapeHtml(newsDetail.dataset.backLabel || "← News")}</a>
+    ${image ? `<img class="news-detail-image" src="${image}" alt="${title}" itemprop="image" />` : ""}
+    <div class="news-detail-kicker">
+      <span class="news-tag" style="--tag-color: ${escapeHtml(news.typeColor || "#0f7c55")}">${typeName}</span>
+    </div>
+    <h1>${title}</h1>
+    <div class="news-detail-meta">
+      ${dateLabel ? `<time datetime="${escapeHtml(news.dateTime)}">${dateLabel}</time>` : ""}
+      <span>·</span>
+      <span>${Number(news.views || 0).toLocaleString(lang === "en" ? "en-US" : "vi-VN")} ${lang === "en" ? "views" : "lượt xem"}</span>
+    </div>
+    <div class="news-detail-content">
+      ${paragraphs.length > 0
+        ? paragraphs.map((item) => `<p>${escapeHtml(item)}</p>`).join("")
+        : `<p>${escapeHtml(news.shortParagraph || "")}</p>`}
+    </div>
+  `;
+}
+
+async function loadCommunityNewsDetail() {
+  if (!newsDetail) return;
+  const lang = getPageLanguage();
+  const id = getNewsIDFromSearch();
+  if (!id) {
+    newsDetail.innerHTML = `<p class="news-empty">${escapeHtml(newsDetail.dataset.emptyMessage || "News article was not found.")}</p>`;
+    return;
+  }
+
+  try {
+    const response = await fetch(`${resolveForumApiBase()}/news/${encodeURIComponent(id)}?lang=${lang}`, {
+      headers: { Accept: "application/json" },
+    });
+    const payload = await response.json().catch(() => null);
+    if (!response.ok) {
+      throw new Error(payload?.message || "Unable to load news detail");
+    }
+    renderNewsDetail(payload?.data?.news);
+  } catch (error) {
+    console.error("[CommunityNews] detail.load.error", error);
+    newsDetail.innerHTML = `<p class="news-empty">${escapeHtml(newsDetail.dataset.emptyMessage || "News article was not found.")}</p>`;
+  }
+}
+
 function updateDriverFields() {
   const isDriver = roleSelect?.value === "driver";
   driverFields.forEach((field) => {
@@ -213,6 +364,7 @@ if (slides.length > 1) {
 
 loadCommunityNews();
 loadCommunityNewsTypes();
+loadCommunityNewsDetail();
 
 newsFilter?.addEventListener("click", (event) => {
   const target = event.target instanceof Element ? event.target : null;

@@ -13,6 +13,8 @@ let currentSlide = 0;
 
 const LOCAL_FORUM_API = "http://127.0.0.1:3020/api/forum";
 const PUBLIC_FORUM_API = "https://api.xeghepviet.com/community/forum/api/forum";
+const NEWS_KEYWORDS_VI = ["xe ghép", "xeghep", "vận tải", "du lịch", "hành khách", "taxi", "ghép người", "gửi đồ"];
+const NEWS_KEYWORDS_EN = ["xe ghep", "xeghep", "transport", "travel", "passengers", "taxi", "carpool", "parcel delivery"];
 
 function resolveForumApiBase() {
   if (window.location.protocol === "file:" || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
@@ -63,6 +65,10 @@ function getNewsListPage() {
 function getNewsIDFromSearch() {
   const params = new URLSearchParams(window.location.search);
   return params.get("id") || "";
+}
+
+function getNewsKeywords() {
+  return getPageLanguage() === "en" ? NEWS_KEYWORDS_EN : NEWS_KEYWORDS_VI;
 }
 
 function renderNewsItems(news) {
@@ -153,6 +159,7 @@ function renderNewsItems(news) {
           "@type": "Organization",
           name: lang === "en" ? "Xe Ghep Viet" : "Xe Ghép Việt",
         },
+        keywords: getNewsKeywords(),
       },
     })),
   });
@@ -245,6 +252,7 @@ function renderArticleJsonLd(news) {
       "@type": "Organization",
       name: getPageLanguage() === "en" ? "Xe Ghep Viet" : "Xe Ghép Việt",
     },
+    keywords: getNewsKeywords(),
   });
   document.head.appendChild(jsonLd);
 }

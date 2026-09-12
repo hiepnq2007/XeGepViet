@@ -148,6 +148,53 @@ xeghepviet.com
 Bật `Enforce HTTPS` khi GitHub xác thực domain xong. DNS có thể mất vài phút đến
 vài giờ để propagate.
 
+## Cấu hình Cloudflare bảo vệ GitHub Pages
+
+Cloudflare chỉ làm lớp DNS/proxy phía trước GitHub Pages; origin của site vẫn là
+GitHub Pages, không trỏ domain này về server BeTrip hoặc IP production riêng.
+
+Thực hiện theo thứ tự sau:
+
+1. Trong GitHub, vào `Settings -> Pages`, đặt custom domain là
+   `xeghepviet.com` và chờ GitHub cấp certificate HTTPS.
+2. Trong Cloudflare DNS, giữ đúng các record sau:
+
+   ```text
+   A      @      185.199.108.153
+   A      @      185.199.109.153
+   A      @      185.199.110.153
+   A      @      185.199.111.153
+   CNAME  www    hiepnq2007.github.io
+   ```
+
+   Trong lúc GitHub xác thực domain/cấp certificate, để các record ở chế độ
+   `DNS only` (mây xám). Sau khi `Enforce HTTPS` hoạt động ổn định, có thể bật
+   `Proxied` (mây cam) cho `@` và `www` để dùng WAF, chống DDoS và caching của
+   Cloudflare.
+3. Tại nhà đăng ký tên miền, thay toàn bộ nameserver cũ bằng đúng hai
+   nameserver Cloudflare được cấp cho zone. Không giữ đồng thời nameserver
+   ZoneDNS và Cloudflare.
+4. Trong Cloudflare `SSL/TLS`, chọn `Full (strict)`, bật `Always Use HTTPS` và
+   `Automatic HTTPS Rewrites`. Không dùng `Flexible` vì có thể tạo redirect
+   loop và kết nối origin không mã hóa.
+5. Không bật DNSSEC ở nhà đăng ký trong lúc đổi nameserver. Sau khi Cloudflare
+   báo zone `Active`, nếu cần DNSSEC thì bật trong Cloudflare rồi thêm DS record
+   mà Cloudflare cấp tại nhà đăng ký.
+
+Kiểm tra sau khi nameserver propagate:
+
+```bash
+dig NS xeghepviet.com
+dig A xeghepviet.com
+dig CNAME www.xeghepviet.com
+curl -I https://xeghepviet.com
+curl -I https://www.xeghepviet.com
+```
+
+`dig NS` phải trả về nameserver Cloudflare; response HTTPS khi proxy hoạt động
+thường có header `server: cloudflare` và `CF-Ray`. Nếu vẫn trả về
+`ns*.zonedns.vn`, cần chờ propagation hoặc kiểm tra lại nameserver tại registrar.
+
 ## Privacy Policy cho App Store
 
 Privacy policy public URL:
